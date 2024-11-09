@@ -61,6 +61,10 @@ def define_props():
         name='Friction:', description=descriptions.FRICTION,
         default=0.005, min=0, max=1, precision=6, subtype='FACTOR'
     )
+    parset.mol_motion_multiplier = bpy.props.FloatProperty(
+        name='Motion:', description=descriptions.FRICTION,
+        default=1, min=0, max=1, precision=6, subtype='FACTOR'
+    )
     parset.mol_collision_damp = bpy.props.FloatProperty(
         name="Damping:", description=descriptions.COLLISION_DAMPING,
         default=0.005, min=0, max=1, precision=6, subtype='FACTOR'

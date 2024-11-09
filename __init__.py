@@ -19,7 +19,8 @@ bl_info = {
     "name": "Molecular+",
     "author":
         "Jean-Francois Gallant (PyroEvil), "
-        "Gregor Quade (u3dreal)",
+        "Gregor Quade (u3dreal), "
+        "ZXMushroom63",
     "version": (1, 17, 21),
     "blender": (3, 00, 0),
     "location": "Properties editor > Physics Tab",
@@ -36,7 +37,7 @@ bl_info = {
 def register():
 
     import bpy
-    from . import properties, ui, operators, creators, addon_prefrences
+    from . import properties, ui, operators, creators, addon_prefrences, geo_plus
 
     properties.define_props()
 
@@ -57,7 +58,7 @@ def register():
 def unregister():
 
     import bpy
-    from . import ui, operators, creators, addon_prefrences
+    from . import ui, operators, creators, addon_prefrences, geo_plus
 
     bpy.types.PHYSICS_PT_add.remove(ui.append_to_PHYSICS_PT_add_panel)
 

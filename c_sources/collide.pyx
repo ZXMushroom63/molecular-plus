@@ -180,3 +180,10 @@ cdef void collide(Particle *par)noexcept nogil:
                     if ((par.sys.relink_chance + par2.sys.relink_chance) / 2) \
                             > 0:
                         create_link(par.id,par.sys.link_max * 2, par2.id)
+                    
+                    par.vel[0] *= par.sys.motion_multiplier
+                    par.vel[1] *= par.sys.motion_multiplier
+                    par.vel[2] *= par.sys.motion_multiplier
+                    par2.vel[0] *= par2.sys.motion_multiplier
+                    par2.vel[1] *= par2.sys.motion_multiplier
+                    par2.vel[2] *= par2.sys.motion_multiplier

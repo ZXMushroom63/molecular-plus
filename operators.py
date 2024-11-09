@@ -1,6 +1,7 @@
 import bpy
 import blf
 import math
+import numpy as np
 
 from mathutils import Vector
 from mathutils.geometry import barycentric_transform as barycentric
@@ -8,6 +9,7 @@ from time import sleep, strftime, gmtime, time
 
 from . import simulate, core
 from .utils import get_object, destroy_caches, update_progress
+from .geo_plus import to_geo_plus
 
 
 class MolRemoveCollider(bpy.types.Operator):
@@ -359,7 +361,8 @@ class MolSimulateModal(bpy.types.Operator):
                 for psys in obj.particle_systems:
                     if psys.settings.mol_active and len(psys.particles):
                         psys.particles.foreach_set('velocity', mol_importdata[1][i])
-                        #psys.particles.foreach_set('location', mol_importdata[0][i])
+                        psys.particles.foreach_set('angular_velocity', mol_importdata[6][i])
+                        psys.particles.foreach_set('location', mol_importdata[0][i])
                         i += 1
 
             scene.mol_newlink = 0
@@ -543,21 +546,21 @@ class MolToolsConvertGeo(bpy.types.Operator):
         iobj = context.object
         iobj.name = obj.name + "_geo_instance"
 
-        #eobj = get_object(context, obj)
-        #particles = eobj.particle_systems.active.particles
-        #par_uvs = np.zeros(len(particles) * 3, dtype=np.float32)
-        #particles.foreach_get('angular_velocity', par_uvs)
+        # eobj = get_object(context, obj)
+        # particles = eobj.particle_systems.active.particles
+        # par_uvs = np.zeros(len(particles) * 3, dtype=np.float32)
+        # particles.foreach_get('angular_velocity', par_uvs)
 
-        #iobj.data.attributes.new('uvs', 'FLOAT_VECTOR', 'POINT')
-        #eiobj = get_object(context, iobj)
-        #attr = eiobj.data.attributes['uvs']
-        #attr.data.foreach_set('vector', par_uvs)
+        # iobj.data.attributes.new('uvs', 'FLOAT_VECTOR', 'POINT')
+        # eiobj = get_object(context, iobj)
+        # attr = eiobj.data.attributes['uvs']
+        # attr.data.foreach_set('vector', par_uvs)
 
-        #par_size = np.zeros(len(particles), dtype=np.float32)
-        #particles.foreach_get('size', par_size)
-        #iobj.data.attributes.new('size', 'FLOAT', 'POINT')
-        #attr = eiobj.data.attributes['size']
-        #attr.data.foreach_set('value', par_size)
+        # par_size = np.zeros(len(particles), dtype=np.float32)
+        # particles.foreach_get('size', par_size)
+        # iobj.data.attributes.new('size', 'FLOAT', 'POINT')
+        # attr = eiobj.data.attributes['size']
+        # attr.data.foreach_set('value', par_size)
 
 
         nodetree = iobj.modifiers['GeometryNodes'].node_group
@@ -569,5 +572,24 @@ class MolToolsConvertGeo(bpy.types.Operator):
 
         return {'FINISHED'}
 
+class MolToolsConvertGeo(bpy.types.Operator):
+    """Convert particles to Shape Key Mesh"""
+    bl_idname = "object.convert_to_geo_plus"
+    bl_label = "Convert for GeoNodes+"
+
+    def execute(self, context):
+        obj = context.object
+        new_obj = to_geo_plus(obj)
+        
+        if (new_obj != None):
+            bpy.ops.object.select_all(action='DESELECT')
+            bpy.context.view_layer.objects.active = new_obj
+            new_obj.select_set(True)
+
+        return {'FINISHED'}
+
 
 operator_classes = (MolSimulateModal, MolSimulate, MolApplyUVcache, MolCacheGlobalUV, MolCacheUV,  MolSet_Substeps, MolClearCache, MolResetCache, MolCancelSim, MolBakeCache, MolResumeSim, MolRemoveCollider, MolToolsConvertGeo)
+
+
+

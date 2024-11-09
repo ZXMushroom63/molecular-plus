@@ -218,7 +218,9 @@ class MS_PT_MolecularToolsPanel(bpy.types.Panel):
         row = layout.row()
         row.operator("object.convert_to_geo", text="Convert to Geonodes", icon='GEOMETRY_NODES')
         row = layout.row()
-        row.prop(context.scene, "mol_render", text="Render after Bakeing")
+        row.operator("object.convert_to_geo_plus", text="Convert to Geonodes+", icon='GEOMETRY_NODES')
+        row = layout.row()
+        row.prop(context.scene, "mol_render", text="Render after Baking")
 
 
 class MS_PT_MolecularDonorPanel(bpy.types.Panel):
@@ -314,6 +316,7 @@ class MS_PT_MolecularPanel(bpy.types.Panel):
         if psys.settings.mol_selfcollision_active or psys.settings.mol_othercollision_active:
             row = box.row()
             row.prop(psys.settings,"mol_friction",text = " Friction:")
+            row.prop(psys.settings,"mol_motion_multiplier",text = " Motion Multiplier:")
             row.prop(psys.settings,"mol_collision_damp",text = " Damping:")
 
         ###   Links at Birth   ###

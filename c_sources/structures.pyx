@@ -38,7 +38,6 @@ cdef struct Node:
     Node *left_child
     Node *right_child
 
-
 cdef struct ParSys:
     int id
     int parnum
@@ -47,6 +46,7 @@ cdef struct ParSys:
     int othercollision_active
     int collision_group
     float friction
+    float motion_multiplier
     float collision_damp
     int links_active
     float link_length

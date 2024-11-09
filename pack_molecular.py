@@ -15,6 +15,7 @@ if hasattr(sys, 'abiflags'):
     abiflags = sys.abiflags
 
 v = str(sys.version_info.major) + str(sys.version_info.minor) + abiflags
+print(v)
 
 name = 'macos'
 if is_linux:
@@ -22,11 +23,11 @@ if is_linux:
 elif is_windows:
     name = 'win'
 
-mkdir(".//molecularplus" + name)
+mkdir(".//molecularplus")
 
 pyfiles = (
     "__init__.py", "creators.py", "descriptions.py", "names.py", "operators.py", "properties.py",
-    "simulate.py", "ui.py", "utils.py", "addon_prefrences.py")
+    "simulate.py", "ui.py", "utils.py", "addon_prefrences.py", "geo_plus.py")
 
 for file in pyfiles:
     shutil.copy(file, ".//molecularplus//" + file)
@@ -55,7 +56,7 @@ with Popen([sys.executable, "setup.py", "build_ext", "--inplace"], stdout=PIPE) 
 
     molfiles = (
     "__init__.py", "creators.py", "descriptions.py", "names.py", "operators.py", "properties.py", "addon_prefrences.py",
-    "simulate.py", "ui.py", "utils.py", 'core.cpython-{}-darwin.so'.format(v), 'core.cp{}-win_amd64.pyd'.format(v), 'core.cpython-{}-x86_64-linux-gnu.so'.format(v))
+    "simulate.py", "ui.py", "utils.py", "geo_plus.py", 'core.cpython-{}-darwin.so'.format(v), 'core.cp{}-win_amd64.pyd'.format(v), 'core.cpython-{}-x86_64-linux-gnu.so'.format(v))
 
     with ZipFile('molecular-plus_{}_'.format(version) + '{}_'.format(v) + name + '.zip', 'w') as z:
         for root, _, files in walk('molecularplus'):

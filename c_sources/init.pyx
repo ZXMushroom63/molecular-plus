@@ -86,6 +86,7 @@ cpdef init(importdata):
         psys[i].link_group = importdata[i + 1][6][45]
         psys[i].other_link_active = importdata[i + 1][6][46]
         psys[i].link_rellength = importdata[i + 1][6][47]
+        psys[i].motion_multiplier = importdata[i + 1][6][48]
 
         for ii in range(psys[i].parnum):
             parlist[jj].id = jj

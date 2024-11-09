@@ -287,8 +287,10 @@ cpdef simulate(importdata):
     exportdata = []
     parloc = []
     parvel = []
+    parmeta = []
     parloctmp = []
     parveltmp = []
+    parmetatmp = []
 
     for i in range(psysnum):
         for ii in range(psys[i].parnum):
@@ -298,10 +300,15 @@ cpdef simulate(importdata):
             parveltmp.append(psys[i].particles[ii].vel[0])
             parveltmp.append(psys[i].particles[ii].vel[1])
             parveltmp.append(psys[i].particles[ii].vel[2])
+            parmetatmp.append(psys[i].particles[ii].mass)
+            parmetatmp.append(psys[i].particles[ii].mass)
+            parmetatmp.append(psys[i].particles[ii].size)
         parloc.append(parloctmp)
         parvel.append(parveltmp)
+        parmeta.append(parmetatmp)
         parloctmp = []
         parveltmp = []
+        partmetatmp = []
 
     totallinks += newlinks
     pydeadlinks = 0
@@ -315,7 +322,8 @@ cpdef simulate(importdata):
         newlinks,
         pydeadlinks,
         totallinks,
-        totaldeadlinks
+        totaldeadlinks,
+        parmeta
     ]
 
     for pair in range(2):
