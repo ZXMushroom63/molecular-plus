@@ -87,6 +87,9 @@ cpdef init(importdata):
         psys[i].other_link_active = importdata[i + 1][6][46]
         psys[i].link_rellength = importdata[i + 1][6][47]
         psys[i].motion_multiplier = importdata[i + 1][6][48]
+        psys[i].melting_point = importdata[i + 1][6][49]
+        psys[i].freezing_point = importdata[i + 1][6][50]
+        psys[i].conductivity = importdata[i + 1][6][51]
 
         for ii in range(psys[i].parnum):
             parlist[jj].id = jj
@@ -98,6 +101,7 @@ cpdef init(importdata):
             parlist[jj].vel[2] = importdata[i + 1][2][(ii * 3) + 2]
             parlist[jj].size = importdata[i + 1][3][ii]
             parlist[jj].mass = importdata[i + 1][4][ii]
+            parlist[jj].temperature = importdata[i + 1][8][ii * 3]
             parlist[jj].state = importdata[i + 1][5][ii]
             parlist[jj].weak = importdata[i + 1][7][ii]
             parlist[jj].sys = &psys[i]

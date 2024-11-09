@@ -318,6 +318,16 @@ class MS_PT_MolecularPanel(bpy.types.Panel):
             row.prop(psys.settings,"mol_friction",text = " Friction:")
             row.prop(psys.settings,"mol_motion_multiplier",text = " Motion Multiplier:")
             row.prop(psys.settings,"mol_collision_damp",text = " Damping:")
+        
+        box = layout.box()
+        row = box.row()
+        row.label(text = "Thermodynamics:")
+        row = box.row()
+        row.prop(psys.settings,"mol_temp",text = " Temperature:")
+        row.prop(psys.settings,"mol_conductivity",text = " Conductivity:")
+        row = box.row()
+        row.prop(psys.settings,"mol_freeze",text = " Freezing Point:")
+        row.prop(psys.settings,"mol_melt",text = " Melting Point:")
 
         ###   Links at Birth   ###
         

@@ -39,6 +39,7 @@ def pack_data(context, initiate):
 
                 par_loc = array.array('f', [0, 0, 0]) * parlen
                 par_vel = array.array('f', [0, 0, 0]) * parlen
+                par_meta = array.array('f', [0, 0, 0]) * parlen
                 par_size = array.array('f', [0]) * parlen
                 par_alive = array.array('h', [0]) * parlen
 
@@ -47,9 +48,11 @@ def pack_data(context, initiate):
 
                 psys.particles.foreach_get('location', par_loc)
                 psys.particles.foreach_get('velocity', par_vel)
+                psys.particles.foreach_get('angular_velocity', par_meta)
                 psys.particles.foreach_get('alive_state', par_alive)
 
                 if initiate:
+                    par_meta = array.array('f', [psys.settings.mol_temp, 0, 0]) * parlen
                     par_mass = array.array('f',[0]) * parlen
 
                     psys.particles.foreach_get('size', par_size)
@@ -99,7 +102,7 @@ def pack_data(context, initiate):
                         psys.settings.mol_relink_ebroken = psys.settings.mol_relink_broken
                         psys.settings.mol_relink_ebrokenrand = psys.settings.mol_relink_brokenrand
 
-                    params = [0] * 49
+                    params = [0] * 52
 
                     params[0] = psys.settings.mol_selfcollision_active
                     params[1] = psys.settings.mol_othercollision_active
@@ -150,6 +153,9 @@ def pack_data(context, initiate):
                     params[46] = psys.settings.mol_other_link_active
                     params[47] = int(psys.settings.mol_link_rellength)
                     params[48] = psys.settings.mol_motion_multiplier
+                    params[49] = psys.settings.mol_melt
+                    params[50] = psys.settings.mol_freeze
+                    params[51] = psys.settings.mol_conductivity
 
                 mol_exportdata = bpy.context.scene.mol_exportdata
 
@@ -164,8 +170,9 @@ def pack_data(context, initiate):
                         par_mass,
                         par_alive,
                         params,
-                        par_weak
+                        par_weak,
+                        par_meta
                     ))
                 else:
                     self_coll = psys.settings.mol_selfcollision_active
-                    mol_exportdata.append((par_loc, par_vel, par_alive, self_coll))
+                    mol_exportdata.append((par_loc, par_vel, par_alive, self_coll, par_meta))

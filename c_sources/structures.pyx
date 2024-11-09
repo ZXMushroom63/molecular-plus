@@ -91,7 +91,9 @@ cdef struct ParSys:
     float link_friction
     int link_group
     int other_link_active
-
+    float melting_point
+    float freezing_point
+    float conductivity
 
 cdef struct SParticle:
     int id
@@ -106,6 +108,7 @@ cdef struct Particle:
     float mass
     int state
     float weak
+    float temperature
 
     ParSys *sys
     int *collided_with

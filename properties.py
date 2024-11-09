@@ -46,6 +46,7 @@ def define_props():
         name="Kg per CubeMeter:", description=descriptions.DENSITY,
         default=1000, min=0.001
     )
+    
 
     parset.mol_selfcollision_active = bpy.props.BoolProperty(
         name="Activate Self Collision",
@@ -63,6 +64,22 @@ def define_props():
     )
     parset.mol_motion_multiplier = bpy.props.FloatProperty(
         name='Motion:', description=descriptions.FRICTION,
+        default=1, min=0, max=1, precision=6, subtype='FACTOR'
+    )
+    parset.mol_temp = bpy.props.FloatProperty(
+        name='Temperature:', description=descriptions.FRICTION,
+        default=20, min=0, max=1, precision=6, subtype='FACTOR'
+    )
+    parset.mol_melt = bpy.props.FloatProperty(
+        name='Melting Point:', description=descriptions.FRICTION,
+        default=5, min=0, max=1, precision=6, subtype='FACTOR'
+    )
+    parset.mol_freeze = bpy.props.FloatProperty(
+        name='Freezing Point:', description=descriptions.FRICTION,
+        default=-5, min=0, max=1, precision=6, subtype='FACTOR'
+    )
+    parset.mol_conductivity = bpy.props.FloatProperty(
+        name='Conductivity:', description=descriptions.FRICTION,
         default=1, min=0, max=1, precision=6, subtype='FACTOR'
     )
     parset.mol_collision_damp = bpy.props.FloatProperty(

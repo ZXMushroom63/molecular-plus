@@ -300,7 +300,7 @@ cpdef simulate(importdata):
             parveltmp.append(psys[i].particles[ii].vel[0])
             parveltmp.append(psys[i].particles[ii].vel[1])
             parveltmp.append(psys[i].particles[ii].vel[2])
-            parmetatmp.append(psys[i].particles[ii].mass)
+            parmetatmp.append(psys[i].particles[ii].temperature)
             parmetatmp.append(psys[i].particles[ii].mass)
             parmetatmp.append(psys[i].particles[ii].size)
         parloc.append(parloctmp)
