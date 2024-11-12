@@ -41,6 +41,8 @@ cdef void collide(Particle *par)noexcept nogil:
     cdef float force1 = 0
     cdef float force2 = 0
     cdef float mathtmp = 0
+    cdef float effective_conductivity = 0
+    cdef float delta_energy = 0
 
     if  par.state < 3:
         return
@@ -187,3 +189,10 @@ cdef void collide(Particle *par)noexcept nogil:
                     par2.vel[0] *= par2.sys.motion_multiplier
                     par2.vel[1] *= par2.sys.motion_multiplier
                     par2.vel[2] *= par2.sys.motion_multiplier
+                    
+                    #thermodynamics pain
+                    mathtmp = 1 / deltatime
+                    effective_conductivity = (par.sys.conductivity + par2.sys.conductivity) / 2
+                    delta_energy = effective_conductivity * (par2.temperature - par.temperature) * mathtmp
+                    par.temperature += delta_energy
+                    par2.temperature -= delta_energy

@@ -572,7 +572,7 @@ class MolToolsConvertGeo(bpy.types.Operator):
 
         return {'FINISHED'}
 
-class MolToolsConvertGeo(bpy.types.Operator):
+class MolToolsConvertGeoPlus(bpy.types.Operator):
     """Convert particles to Shape Key Mesh"""
     bl_idname = "object.convert_to_geo_plus"
     bl_label = "Convert for GeoNodes+"
@@ -589,7 +589,7 @@ class MolToolsConvertGeo(bpy.types.Operator):
         return {'FINISHED'}
 
 
-operator_classes = (MolSimulateModal, MolSimulate, MolApplyUVcache, MolCacheGlobalUV, MolCacheUV,  MolSet_Substeps, MolClearCache, MolResetCache, MolCancelSim, MolBakeCache, MolResumeSim, MolRemoveCollider, MolToolsConvertGeo)
+operator_classes = (MolSimulateModal, MolSimulate, MolApplyUVcache, MolCacheGlobalUV, MolCacheUV,  MolSet_Substeps, MolClearCache, MolResetCache, MolCancelSim, MolBakeCache, MolResumeSim, MolRemoveCollider, MolToolsConvertGeo, MolToolsConvertGeoPlus)
 
 
 

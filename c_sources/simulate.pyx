@@ -12,7 +12,7 @@
 cimport cython
 from time import process_time as clock
 from cython.parallel import parallel, prange, threadid
-from libc.stdlib cimport malloc, realloc, free, rand, srand, abs
+from libc.stdlib cimport malloc, realloc, free, rand, srand, abs, rand
 from libc.string cimport memcpy
 from libc.math cimport sqrt
 
@@ -302,13 +302,13 @@ cpdef simulate(importdata):
             parveltmp.append(psys[i].particles[ii].vel[2])
             parmetatmp.append(psys[i].particles[ii].temperature)
             parmetatmp.append(psys[i].particles[ii].mass)
-            parmetatmp.append(psys[i].particles[ii].size)
+            parmetatmp.append(rand())
         parloc.append(parloctmp)
         parvel.append(parveltmp)
         parmeta.append(parmetatmp)
         parloctmp = []
         parveltmp = []
-        partmetatmp = []
+        parmetatmp = []
 
     totallinks += newlinks
     pydeadlinks = 0
@@ -332,7 +332,7 @@ cpdef simulate(importdata):
             free(parPool[0].parity[pair].heap[heaps].par)
         free(parPool[0].parity[pair].heap)
     free(parPool[0].parity)
-    free(parPool)
+    free(parPool) #float[][]
 
     if profiling == 1:
         print("-->export time", clock() - stime, "sec")

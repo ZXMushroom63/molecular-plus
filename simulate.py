@@ -39,7 +39,7 @@ def pack_data(context, initiate):
 
                 par_loc = array.array('f', [0, 0, 0]) * parlen
                 par_vel = array.array('f', [0, 0, 0]) * parlen
-                par_meta = array.array('f', [0, 0, 0]) * parlen
+                par_meta = array.array('f', [psys.settings.mol_temp, 0, 0]) * parlen
                 par_size = array.array('f', [0]) * parlen
                 par_alive = array.array('h', [0]) * parlen
 
@@ -48,11 +48,10 @@ def pack_data(context, initiate):
 
                 psys.particles.foreach_get('location', par_loc)
                 psys.particles.foreach_get('velocity', par_vel)
-                psys.particles.foreach_get('angular_velocity', par_meta)
                 psys.particles.foreach_get('alive_state', par_alive)
 
                 if initiate:
-                    par_meta = array.array('f', [psys.settings.mol_temp, 0, 0]) * parlen
+                    print("Setting initial temperature to ", psys.settings.mol_temp)
                     par_mass = array.array('f',[0]) * parlen
 
                     psys.particles.foreach_get('size', par_size)
@@ -175,4 +174,4 @@ def pack_data(context, initiate):
                     ))
                 else:
                     self_coll = psys.settings.mol_selfcollision_active
-                    mol_exportdata.append((par_loc, par_vel, par_alive, self_coll, par_meta))
+                    mol_exportdata.append((par_loc, par_vel, par_alive, self_coll))

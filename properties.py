@@ -67,20 +67,20 @@ def define_props():
         default=1, min=0, max=1, precision=6, subtype='FACTOR'
     )
     parset.mol_temp = bpy.props.FloatProperty(
-        name='Temperature:', description=descriptions.FRICTION,
-        default=20, min=0, max=1, precision=6, subtype='FACTOR'
+        name='Temperature', description=descriptions.FRICTION,
+        default=20, min=0, max=1000, precision=6, subtype='FACTOR'
     )
     parset.mol_melt = bpy.props.FloatProperty(
-        name='Melting Point:', description=descriptions.FRICTION,
-        default=5, min=0, max=1, precision=6, subtype='FACTOR'
+        name='Melting Point', description=descriptions.FRICTION,
+        default=5, min=0, max=1000, precision=6, subtype='FACTOR'
     )
     parset.mol_freeze = bpy.props.FloatProperty(
-        name='Freezing Point:', description=descriptions.FRICTION,
-        default=-5, min=0, max=1, precision=6, subtype='FACTOR'
+        name='Freezing Point', description=descriptions.FRICTION,
+        default=-5, min=0, max=1000, precision=6, subtype='FACTOR'
     )
     parset.mol_conductivity = bpy.props.FloatProperty(
-        name='Conductivity:', description=descriptions.FRICTION,
-        default=1, min=0, max=1, precision=6, subtype='FACTOR'
+        name='Conductivity', description=descriptions.FRICTION,
+        default=0.5, min=0, max=10, precision=6, subtype='FACTOR'
     )
     parset.mol_collision_damp = bpy.props.FloatProperty(
         name="Damping:", description=descriptions.COLLISION_DAMPING,

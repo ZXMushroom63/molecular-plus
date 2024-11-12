@@ -18,8 +18,6 @@ cdef void update(data):
             psys[i].particles[ii].vel[0] = data[i][1][(ii * 3)]
             psys[i].particles[ii].vel[1] = data[i][1][(ii * 3) + 1]
             psys[i].particles[ii].vel[2] = data[i][1][(ii * 3) + 2]
-            psys[i].particles[ii].vel[0] = data[i][1][(ii * 3)]
-            psys[i].particles[ii].temperature =  data[i][4][ii * 3]
 
             if psys[i].particles[ii].state == 3 and data[i][2][ii] == 3:
                 psys[i].particles[ii].state = data[i][2][ii] + 1
