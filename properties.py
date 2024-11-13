@@ -63,24 +63,32 @@ def define_props():
         default=0.005, min=0, max=1, precision=6, subtype='FACTOR'
     )
     parset.mol_motion_multiplier = bpy.props.FloatProperty(
-        name='Motion:', description=descriptions.FRICTION,
+        name='Motion', description="The motion multiplier after a collision occurs.",
         default=1, min=0, max=1, precision=6, subtype='FACTOR'
     )
     parset.mol_temp = bpy.props.FloatProperty(
-        name='Temperature', description=descriptions.FRICTION,
-        default=20, min=0, max=1000, precision=6, subtype='FACTOR'
+        name='Temperature', description="The initial temperature of the particles",
+        default=20, min=-1000, max=1000, precision=6, subtype='FACTOR'
     )
     parset.mol_melt = bpy.props.FloatProperty(
-        name='Melting Point', description=descriptions.FRICTION,
-        default=5, min=0, max=1000, precision=6, subtype='FACTOR'
+        name='Melting Point', description="The melting point of the particles in this particle system.",
+        default=5, min=-1000, max=1000, precision=6, subtype='FACTOR'
     )
     parset.mol_freeze = bpy.props.FloatProperty(
-        name='Freezing Point', description=descriptions.FRICTION,
-        default=-5, min=0, max=1000, precision=6, subtype='FACTOR'
+        name='Freezing Point', description="The freezing point of the particles in this particle system.",
+        default=-5, min=-1000, max=1000, precision=6, subtype='FACTOR'
     )
     parset.mol_conductivity = bpy.props.FloatProperty(
-        name='Conductivity', description=descriptions.FRICTION,
+        name='Conductivity', description="The conductivity of the particles in the particle system (0-1).",
         default=0.5, min=0, max=10, precision=6, subtype='FACTOR'
+    )
+    parset.mol_atmospheric_temperature = bpy.props.FloatProperty(
+        name='Atmospheric Temperature', description="The temperature of the atmosphere",
+        default=20, min=0, max=10, precision=6, subtype='FACTOR'
+    )
+    parset.mol_atmospheric_conductivity = bpy.props.FloatProperty(
+        name='Atmospheric Conductivity', description="The rate that the particles' temperature interpolates to the atmospheric temperature.",
+        default=0, min=0, max=1, precision=6, subtype='FACTOR'
     )
     parset.mol_collision_damp = bpy.props.FloatProperty(
         name="Damping:", description=descriptions.COLLISION_DAMPING,

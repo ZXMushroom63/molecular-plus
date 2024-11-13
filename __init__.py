@@ -72,6 +72,7 @@ def unregister():
         bpy.utils.unregister_class(panel)
 
     bpy.utils.unregister_class(addon_prefrences.pref_classes)
+    
 
 if __name__ == "__main__":
     register()

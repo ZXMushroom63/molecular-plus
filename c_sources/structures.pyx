@@ -94,6 +94,8 @@ cdef struct ParSys:
     float melting_point
     float freezing_point
     float conductivity
+    float atmospheric_conductivity
+    float atmospheric_temperature
 
 cdef struct SParticle:
     int id

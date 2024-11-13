@@ -18,7 +18,7 @@ if os.path.isfile('core.c'):
     os.remove('core.c')
 
 filenames = ['simulate.pyx', 'update.pyx', 'init.pyx', 'links.pyx', 'kdtree.pyx',
-             'collide.pyx', 'memory.pyx', 'utils.pyx', 'structures.pyx']
+             'collide.pyx', 'memory.pyx', 'utils.pyx', 'structures.pyx', 'apply.pyx']
 
 with open('core.pyx', 'w') as outfile:
     # This will clear the file before writing to it

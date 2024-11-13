@@ -2,6 +2,7 @@ import bpy
 import blf
 import math
 import numpy as np
+import random
 
 from mathutils import Vector
 from mathutils.geometry import barycentric_transform as barycentric
@@ -55,7 +56,7 @@ class MolSimulate(bpy.types.Operator):
                 )
 
     def execute(self, context):
-
+        
         scene = context.scene
         if not self.resume:
             for ob in bpy.data.objects:
@@ -77,6 +78,9 @@ class MolSimulate(bpy.types.Operator):
         mol_substep = scene.mol_substep
         scene.render.frame_map_old = 1
         scene.render.frame_map_new = mol_substep + 1
+        
+        context.object.particle_systems[0].settings.use_rotations = True
+        context.object.particle_systems[0].settings.angular_velocity_mode = 'RAND'
 
         if self.resume:
             scene.frame_start = scene.mol_old_currentframe
@@ -360,6 +364,7 @@ class MolSimulateModal(bpy.types.Operator):
                 obj = get_object(context, ob)
                 for psys in obj.particle_systems:
                     if psys.settings.mol_active and len(psys.particles):
+                        print()
                         psys.particles.foreach_set('velocity', mol_importdata[1][i])
                         psys.particles.foreach_set('angular_velocity', mol_importdata[6][i])
                         psys.particles.foreach_set('location', mol_importdata[0][i])

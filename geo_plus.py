@@ -44,20 +44,29 @@ def add_geometry_nodes_modifier(obj, frame_frequency):
     string_constant_node.string = "velocity"
     string_constant_node_mt = nodes.new(type='FunctionNodeInputString')
     string_constant_node_mt.string = "meta"
+    string_constant_node_sz = nodes.new(type='FunctionNodeInputString')
+    string_constant_node_sz.string = "size"
     join_strings_node = nodes.new(type='GeometryNodeStringJoin')
     join_strings_node.inputs['Delimiter'].default_value = "_"
     join_strings_node_mt = nodes.new(type='GeometryNodeStringJoin')
     join_strings_node_mt.inputs['Delimiter'].default_value = "_"
+    join_strings_node_sz = nodes.new(type='GeometryNodeStringJoin')
+    join_strings_node_sz.inputs['Delimiter'].default_value = "_"
     named_attribute_node = nodes.new(type='GeometryNodeInputNamedAttribute')
     named_attribute_node.data_type = 'FLOAT_VECTOR'
     named_attribute_node_mt = nodes.new(type='GeometryNodeInputNamedAttribute')
     named_attribute_node_mt.data_type = 'FLOAT_VECTOR'
+    named_attribute_node_sz = nodes.new(type='GeometryNodeInputNamedAttribute')
+    named_attribute_node_sz.data_type = 'FLOAT'
     store_named_attribute_node = nodes.new(type='GeometryNodeStoreNamedAttribute')
     store_named_attribute_node.data_type = 'FLOAT_VECTOR'
     store_named_attribute_node.inputs['Name'].default_value = "velocity"
     store_named_attribute_node_mt = nodes.new(type='GeometryNodeStoreNamedAttribute')
     store_named_attribute_node_mt.data_type = 'FLOAT_VECTOR'
     store_named_attribute_node_mt.inputs['Name'].default_value = "meta"
+    store_named_attribute_node_sz = nodes.new(type='GeometryNodeStoreNamedAttribute')
+    store_named_attribute_node_sz.data_type = 'FLOAT'
+    store_named_attribute_node_sz.inputs['Name'].default_value = "size"
     group_input = nodes.new(type='NodeGroupInput')
     group_output = nodes.new(type='NodeGroupOutput')
 
@@ -76,6 +85,9 @@ def add_geometry_nodes_modifier(obj, frame_frequency):
     links.new(value_to_string_node.outputs['String'], join_strings_node_mt.inputs[1])
     links.new(string_constant_node_mt.outputs['String'], join_strings_node_mt.inputs[1])
     
+    links.new(value_to_string_node.outputs['String'], join_strings_node_sz.inputs[1])
+    links.new(string_constant_node_sz.outputs['String'], join_strings_node_sz.inputs[1])
+    
     links.new(join_strings_node.outputs['String'], named_attribute_node.inputs['Name'])
     links.new(named_attribute_node.outputs['Attribute'], store_named_attribute_node.inputs['Value'])
     links.new(group_input.outputs[0], store_named_attribute_node.inputs['Geometry'])
@@ -83,7 +95,11 @@ def add_geometry_nodes_modifier(obj, frame_frequency):
     
     links.new(join_strings_node_mt.outputs['String'], named_attribute_node_mt.inputs['Name'])
     links.new(named_attribute_node_mt.outputs['Attribute'], store_named_attribute_node_mt.inputs['Value'])
-    links.new(store_named_attribute_node_mt.outputs['Geometry'], group_output.inputs[0])
+    links.new(store_named_attribute_node_mt.outputs['Geometry'], store_named_attribute_node_sz.inputs['Geometry'])
+    
+    links.new(join_strings_node_sz.outputs['String'], named_attribute_node_sz.inputs['Name'])
+    links.new(named_attribute_node_sz.outputs['Attribute'], store_named_attribute_node_sz.inputs['Value'])
+    links.new(store_named_attribute_node_sz.outputs['Geometry'], group_output.inputs[0])
 
 
 
@@ -102,6 +118,12 @@ def create_meta_layer(mesh, frame):
         mesh.attributes.new(name=layer_name, type='FLOAT_VECTOR', domain='POINT')
     return mesh.attributes[layer_name]
 
+def create_size_layer(mesh, frame):
+    layer_name = f"size_{frame}"
+    if layer_name not in mesh.attributes:
+        mesh.attributes.new(name=layer_name, type='FLOAT', domain='POINT')
+    return mesh.attributes[layer_name]
+
 def to_geo_plus(obj):
     # Ensure the object has a particle system
     if obj.particle_systems:
@@ -111,7 +133,6 @@ def to_geo_plus(obj):
         # Evaluate the depsgraph (Important step)
         evaluated_obj = obj.evaluated_get(degp)
         particle_system = evaluated_obj.particle_systems[0]
-
         # Create a new mesh to store the particle positions
         mesh = bpy.data.meshes.new("ParticleMesh")
         particle_obj = bpy.data.objects.new("ParticleObject", mesh)
@@ -130,8 +151,8 @@ def to_geo_plus(obj):
         particle_obj.shape_key_add(name="Basis")
 
         # Set up animation
-        frame_start = particle_system.point_cache.frame_start
-        frame_end = particle_system.point_cache.frame_end
+        frame_start = bpy.context.scene.frame_start
+        frame_end = bpy.context.scene.frame_end
 
         # Ensure velocity layer for frame 0 is created
         bpy.context.scene.frame_set(frame_start)
@@ -140,12 +161,15 @@ def to_geo_plus(obj):
         locations = [0] * (3 * total_particles)
         velocities = [0] * (3 * total_particles)
         particle_meta = [0] * (3 * total_particles)
+        particle_size = [0] * total_particles
         particles.foreach_get("location", locations)
         particles.foreach_get("velocity", velocities)
         particles.foreach_get("angular_velocity", particle_meta)
+        particles.foreach_get("size", particle_size)
 
         velocity_layer_0 = create_velocity_layer(mesh, frame_start)
         meta_layer_0 = create_meta_layer(mesh, frame_start)
+        size_layer_0 = create_size_layer(mesh, frame_start)
         
         for i in range(total_particles):
             vx, vy, vz = velocities[i*3], velocities[i*3 + 1], velocities[i*3 + 2]
@@ -153,6 +177,9 @@ def to_geo_plus(obj):
             
             ax, ay, az = particle_meta[i*3], particle_meta[i*3 +1], particle_meta[i*3 + 2]
             meta_layer_0.data[i].vector = (ax, ay, az)
+            
+            s = particle_size[i]
+            size_layer_0.data[i].value = s
         
         for frame in range(frame_start, frame_end + 1):
             if frame % n != 0:  # Skip keyframing every n frames
@@ -165,10 +192,12 @@ def to_geo_plus(obj):
             locations = [0] * (3 * total_particles)
             velocities = [0] * (3 * total_particles)
             particle_meta = [0] * (3 * total_particles)
+            particle_size = [0] * total_particles
 
             particles.foreach_get("location", locations)
             particles.foreach_get("velocity", velocities)
             particles.foreach_get("angular_velocity", particle_meta)
+            particles.foreach_get("size", particle_size)
 
             shape_key = particle_obj.shape_key_add(name=f"Frame_{frame}")
             velocity_layer = create_velocity_layer(mesh, frame)
@@ -185,6 +214,11 @@ def to_geo_plus(obj):
             for i in range(total_particles):
                 ax, ay, az = particle_meta[i*3], particle_meta[i*3 + 1], particle_meta[i*3 + 2]
                 meta_layer.data[i].vector = (ax, ay, az)
+                
+            meta_layer = create_size_layer(mesh, frame)
+            for i in range(total_particles):
+                s = particle_size[i]
+                meta_layer.data[i].value = s
                 
             shape_key.value = 1.0
             shape_key.keyframe_insert(data_path="value", frame=frame)

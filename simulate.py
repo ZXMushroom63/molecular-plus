@@ -49,6 +49,7 @@ def pack_data(context, initiate):
                 psys.particles.foreach_get('location', par_loc)
                 psys.particles.foreach_get('velocity', par_vel)
                 psys.particles.foreach_get('alive_state', par_alive)
+                psys.particles.foreach_get('alive_state', par_alive)
 
                 if initiate:
                     print("Setting initial temperature to ", psys.settings.mol_temp)
@@ -101,7 +102,7 @@ def pack_data(context, initiate):
                         psys.settings.mol_relink_ebroken = psys.settings.mol_relink_broken
                         psys.settings.mol_relink_ebrokenrand = psys.settings.mol_relink_brokenrand
 
-                    params = [0] * 52
+                    params = [0] * 54
 
                     params[0] = psys.settings.mol_selfcollision_active
                     params[1] = psys.settings.mol_othercollision_active
@@ -155,6 +156,8 @@ def pack_data(context, initiate):
                     params[49] = psys.settings.mol_melt
                     params[50] = psys.settings.mol_freeze
                     params[51] = psys.settings.mol_conductivity
+                    params[52] = psys.settings.mol_atmospheric_temperature
+                    params[53] = psys.settings.mol_atmospheric_conductivity
 
                 mol_exportdata = bpy.context.scene.mol_exportdata
 

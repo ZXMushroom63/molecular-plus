@@ -280,6 +280,10 @@ cpdef simulate(importdata):
                             parPool[0].parity[pair].heap[heaps].par[i]
                         ].neighboursnum = 0
 
+    for i in range(psysnum):
+        for ii in range(psys[i].parnum):
+            apply(&psys[i].particles[ii], &psys[i])
+    
     if profiling == 1:
         print("-->collide/solve link time", clock() - stime, "sec")
         stime = clock()

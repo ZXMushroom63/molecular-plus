@@ -328,6 +328,10 @@ class MS_PT_MolecularPanel(bpy.types.Panel):
         row = box.row()
         row.prop(psys.settings,"mol_freeze",text = " Freezing Point:")
         row.prop(psys.settings,"mol_melt",text = " Melting Point:")
+        row = box.row()
+        row.label(text = "Atmosphere Thermodynamics:")
+        row.prop(psys.settings,"mol_atmospheric_temperature",text = " Atmosphere Temperature:")
+        row.prop(psys.settings,"mol_atmospheric_conductivity",text = " Atmosphere Conductivity:")
 
         ###   Links at Birth   ###
         
