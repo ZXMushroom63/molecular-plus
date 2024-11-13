@@ -24,6 +24,11 @@ def define_props():
     parset.mol_refresh = bpy.props.BoolProperty(
         name="mol_refresh", description=descriptions.REFRESH, default=True
     )
+    parset.mol_script = bpy.props.PointerProperty( 
+        name="Script", 
+        description="MolxFlow script that is run every frame.", 
+        type=bpy.types.Text
+    )
     parset.mol_density_active = bpy.props.BoolProperty(
         name="Calculate particles weight by density",
         description=descriptions.DENSITY_ACTIVE,
@@ -70,13 +75,17 @@ def define_props():
         name='Temperature', description="The initial temperature of the particles",
         default=20, min=-1000, max=1000, precision=6, subtype='FACTOR'
     )
+    parset.mol_thermolink = bpy.props.BoolProperty(
+        name='Melting and Freezing', description="Should thermodynamics simulate melting and freezing.",
+        default=False
+    )
     parset.mol_melt = bpy.props.FloatProperty(
         name='Melting Point', description="The melting point of the particles in this particle system.",
-        default=5, min=-1000, max=1000, precision=6, subtype='FACTOR'
+        default=0, min=-1000, max=1000, precision=6, subtype='FACTOR'
     )
     parset.mol_freeze = bpy.props.FloatProperty(
         name='Freezing Point', description="The freezing point of the particles in this particle system.",
-        default=-5, min=-1000, max=1000, precision=6, subtype='FACTOR'
+        default=-1, min=-1000, max=1000, precision=6, subtype='FACTOR'
     )
     parset.mol_conductivity = bpy.props.FloatProperty(
         name='Conductivity', description="The conductivity of the particles in the particle system (0-1).",

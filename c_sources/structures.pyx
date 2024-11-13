@@ -95,6 +95,8 @@ cdef struct ParSys:
     float conductivity
     float atmospheric_conductivity
     float atmospheric_temperature
+    #char* script
+    int thermodynamic_linking
 
 cdef struct SParticle:
     int id

@@ -179,7 +179,7 @@ cdef void collide(Particle *par)noexcept nogil:
                         (par2.collided_num + 1) * cython.sizeof(int)
                     )
 
-                    if (((par.sys.relink_chance + par2.sys.relink_chance) / 2) > 0) or (((par.sys.freezing_point - par.temperature) <= 0) and ((par2.sys.freezing_point - par2.temperature) <= 0)):
+                    if (((par.sys.relink_chance + par2.sys.relink_chance) / 2) > 0) or (((par.sys.freezing_point - par.temperature) <= 0) and ((par2.sys.freezing_point - par2.temperature) <= 0) and ((par.sys.thermodynamic_linking * par2.sys.thermodynamic_linking) == 1)):
                         create_link(par.id,par.sys.link_max * 2, par2.id)
                     
                     par.vel[0] *= par.sys.motion_multiplier

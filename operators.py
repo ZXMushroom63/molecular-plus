@@ -506,7 +506,7 @@ class MolResumeSim(bpy.types.Operator):
 class MolToolsConvertGeo(bpy.types.Operator):
     """Convert particles to Particle Instance Mesh"""
     bl_idname = "object.convert_to_geo"
-    bl_label = "Convert for GeoNodes"
+    bl_label = "Convert to GeoNodes"
 
     def add_nodetree(self,context, node_tree):
         out_node = node_tree.nodes["Group Output"]
@@ -580,7 +580,7 @@ class MolToolsConvertGeo(bpy.types.Operator):
 class MolToolsConvertGeoPlus(bpy.types.Operator):
     """Convert particles to Shape Key Mesh"""
     bl_idname = "object.convert_to_geo_plus"
-    bl_label = "Convert for GeoNodes+"
+    bl_label = "Convert to GeoNodes+"
 
     def execute(self, context):
         obj = context.object

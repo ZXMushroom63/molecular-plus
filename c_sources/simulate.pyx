@@ -306,7 +306,7 @@ cpdef simulate(importdata):
             parveltmp.append(psys[i].particles[ii].vel[2])
             parmetatmp.append(psys[i].particles[ii].temperature)
             parmetatmp.append(psys[i].particles[ii].mass)
-            parmetatmp.append(rand())
+            parmetatmp.append(psys[i].particles[ii].neighboursnum)
         parloc.append(parloctmp)
         parvel.append(parveltmp)
         parmeta.append(parmetatmp)

@@ -233,7 +233,7 @@ cdef void solve_link(Particle *par)noexcept nogil:
             LengthZ = Loc2[2] - Loc1[2]
             Length = sqrt(LengthX * LengthX + LengthY * LengthY + LengthZ * LengthZ)
             # Length = (LengthX ** 2 + LengthY ** 2 + LengthZ ** 2) ** (0.5)
-            melting_situation = (par.temperature >= par.sys.melting_point) + (par2.temperature >= par2.sys.melting_point)
+            melting_situation = ((par.temperature >= par.sys.melting_point) * par.sys.thermodynamic_linking) + ((par2.temperature >= par2.sys.melting_point)  * par.sys.thermodynamic_linking)
             if (par.links[i].length != Length and Length != 0) or (melting_situation > 0):
                 if par.links[i].length > Length:
                     stiff = par.links[i].stiffness * deltatime

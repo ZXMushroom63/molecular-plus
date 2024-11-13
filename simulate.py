@@ -102,7 +102,7 @@ def pack_data(context, initiate):
                         psys.settings.mol_relink_ebroken = psys.settings.mol_relink_broken
                         psys.settings.mol_relink_ebrokenrand = psys.settings.mol_relink_brokenrand
 
-                    params = [0] * 54
+                    params = [0] * 55
 
                     params[0] = psys.settings.mol_selfcollision_active
                     params[1] = psys.settings.mol_othercollision_active
@@ -158,6 +158,7 @@ def pack_data(context, initiate):
                     params[51] = psys.settings.mol_conductivity
                     params[52] = psys.settings.mol_atmospheric_temperature
                     params[53] = psys.settings.mol_atmospheric_conductivity
+                    params[54] = psys.settings.mol_thermolink * 1
 
                 mol_exportdata = bpy.context.scene.mol_exportdata
 

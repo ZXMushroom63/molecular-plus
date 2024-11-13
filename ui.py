@@ -321,10 +321,18 @@ class MS_PT_MolecularPanel(bpy.types.Panel):
         
         box = layout.box()
         row = box.row()
+        row.label(text = "Script:")
+        row = box.row()
+        row.prop(psys.settings,"mol_script",text = " Script:")
+        
+        box = layout.box()
+        row = box.row()
         row.label(text = "Thermodynamics:")
         row = box.row()
         row.prop(psys.settings,"mol_temp",text = " Temperature:")
         row.prop(psys.settings,"mol_conductivity",text = " Conductivity:")
+        row = box.row()
+        row.prop(psys.settings,"mol_thermolink",text = " Melt/freeze:")
         row = box.row()
         row.prop(psys.settings,"mol_freeze",text = " Freezing Point:")
         row.prop(psys.settings,"mol_melt",text = " Melting Point:")
