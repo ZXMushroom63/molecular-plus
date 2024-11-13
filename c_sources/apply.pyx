@@ -12,4 +12,4 @@ cdef void apply(Particle *par, ParSys *parSys)noexcept nogil:
     #Atmospheric Temperature
     real_deltatime = 1 / deltatime
     delta_temperature = parSys.atmospheric_temperature - par.temperature
-    par.temperature += delta_temperature * parSys.atmospheric_conductivity
+    par.temperature += delta_temperature * parSys.atmospheric_conductivity * real_deltatime

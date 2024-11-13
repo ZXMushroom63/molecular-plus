@@ -1,5 +1,5 @@
 cdef struct Links:
-    float lenght
+    float length
     int start
     int end
     float stiffness
@@ -11,7 +11,6 @@ cdef struct Links:
     float edamping
     float ebroken
     float friction
-
 
 cdef struct KDTree:
     int numnodes

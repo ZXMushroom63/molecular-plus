@@ -123,8 +123,8 @@ cpdef simulate(importdata):
         if parlist[i].sys.links_active == 1:
             if parlist[i].links_num > 0:
                 for ii in range(parlist[i].links_num):
-                    if parlist[i].links[ii].lenght > maxSize:
-                        maxSize = parlist[i].links[ii].lenght
+                    if parlist[i].links[ii].length > maxSize:
+                        maxSize = parlist[i].links[ii].length
 
         if (parlist[i].size * 2) > maxSize:
             maxSize = (parlist[i].size * 2)

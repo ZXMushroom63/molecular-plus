@@ -77,8 +77,8 @@ cdef void create_link(int par_id, int max_link, int parothers_id=-1)noexcept nog
                         srand(1)
                         tension = ((par.sys.link_tension + par2.sys.link_tension)/2) * ((((rand() / rand_max) * tensionrandom) - (tensionrandom / 2)) + 1)
                         srand(2)
-                        link.lenght = sqrt(square_dist(par.loc,par2.loc,3)) * tension
-                        # link.lenght = ((square_dist(par.loc,par2.loc,3))**0.5) * tension
+                        link.length = sqrt(square_dist(par.loc,par2.loc,3)) * tension
+                        # link.length = ((square_dist(par.loc,par2.loc,3))**0.5) * tension
                         stiffrandom = (par.sys.link_stiffrand + par2.sys.link_stiffrand) / 2 * 2
                         link.stiffness = ((par.sys.link_stiff + par2.sys.link_stiff)/2) * ((((rand() / rand_max) * stiffrandom) - (stiffrandom / 2)) + 1)
                         srand(3)
@@ -124,8 +124,8 @@ cdef void create_link(int par_id, int max_link, int parothers_id=-1)noexcept nog
                         srand(10)
                         tension = ((par.sys.relink_tension + par2.sys.relink_tension)/2) * ((((rand() / rand_max) * tensionrandom) - (tensionrandom / 2)) + 1)
                         srand(11)
-                        link.lenght = sqrt(square_dist(par.loc,par2.loc,3)) * tension
-                        # link.lenght = ((square_dist(par.loc,par2.loc,3))**0.5) * tension
+                        link.length = sqrt(square_dist(par.loc,par2.loc,3)) * tension
+                        # link.length = ((square_dist(par.loc,par2.loc,3))**0.5) * tension
                         stiffrandom = (par.sys.relink_stiffrand + par2.sys.relink_stiffrand) / 2 * 2
                         link.stiffness = ((par.sys.relink_stiff + par2.sys.relink_stiff)/2) * ((((rand() / rand_max) * stiffrandom) - (stiffrandom / 2)) + 1)
                         srand(12)
@@ -184,6 +184,7 @@ cdef void solve_link(Particle *par)noexcept nogil:
     cdef float Vz = 0
     cdef float V = 0
     cdef float ForceSpring = 0
+    cdef int melting_situation
     cdef float ForceDamper = 0
     cdef float ForceX = 0
     cdef float ForceY = 0
@@ -232,12 +233,13 @@ cdef void solve_link(Particle *par)noexcept nogil:
             LengthZ = Loc2[2] - Loc1[2]
             Length = sqrt(LengthX * LengthX + LengthY * LengthY + LengthZ * LengthZ)
             # Length = (LengthX ** 2 + LengthY ** 2 + LengthZ ** 2) ** (0.5)
-            if par.links[i].lenght != Length and Length != 0:
-                if par.links[i].lenght > Length:
+            melting_situation = (par.temperature >= par.sys.melting_point) + (par2.temperature >= par2.sys.melting_point)
+            if (par.links[i].length != Length and Length != 0) or (melting_situation > 0):
+                if par.links[i].length > Length:
                     stiff = par.links[i].stiffness * deltatime
                     damping = par.links[i].damping
                     exp = par.links[i].exponent
-                if par.links[i].lenght < Length:
+                if par.links[i].length < Length:
                     stiff = par.links[i].estiffness * deltatime
                     damping = par.links[i].edamping
                     exp = par.links[i].eexponent
@@ -245,7 +247,7 @@ cdef void solve_link(Particle *par)noexcept nogil:
                 Vy = V2[1] - V1[1]
                 Vz = V2[2] - V1[2]
                 V = (Vx * LengthX + Vy * LengthY + Vz * LengthZ) / Length
-                ForceSpring = ((Length - par.links[i].lenght) ** (exp)) * stiff
+                ForceSpring = ((Length - par.links[i].length) ** (exp)) * stiff
                 ForceDamper = damping * V
                 ForceSprDam = ForceSpring + ForceDamper
                 ForceX = ForceSprDam * LengthX / Length
@@ -338,8 +340,9 @@ cdef void solve_link(Particle *par)noexcept nogil:
                 #par2.vel[2] = ypar2_vel[2] + ((xpar2_vel[2] * friction2) + \
                 #    (xpar1_vel[2] * ( 1 - friction2)))
 
-                if Length > (par.links[i].lenght * (1 + par.links[i].ebroken)) \
-                or Length < (par.links[i].lenght  * (1 - par.links[i].broken)):
+                if Length > (par.links[i].length * (1 + par.links[i].ebroken)) \
+                or Length < (par.links[i].length  * (1 - par.links[i].broken)) \
+                or (melting_situation > 0):
 
                     par.links[i].start = -1
                     par.links_activnum -= 1

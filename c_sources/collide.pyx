@@ -8,12 +8,12 @@ cdef void collide(Particle *par)noexcept nogil:
     cdef float stiff = 0
     cdef float target = 0
     cdef float sqtarget = 0
-    cdef float lenghtx = 0
-    cdef float lenghty = 0
-    cdef float lenghtz = 0
-    cdef float sqlenght = 0
-    cdef float lenght = 0
-    cdef float invlenght = 0
+    cdef float lengthx = 0
+    cdef float lengthy = 0
+    cdef float lengthz = 0
+    cdef float sqlength = 0
+    cdef float length = 0
+    cdef float invlength = 0
     cdef float factor = 0
     cdef float ratio1 = 0
     cdef float ratio2 = 0
@@ -87,31 +87,31 @@ cdef void collide(Particle *par)noexcept nogil:
 
             # if par.state <= 1 and par2.state <= 1 and \
             #       par2 not in par.link_with and par not in par2.link_with:
-                lenghtx = par.loc[0] - par2.loc[0]
-                lenghty = par.loc[1] - par2.loc[1]
-                lenghtz = par.loc[2] - par2.loc[2]
-                sqlenght  = square_dist(par.loc, par2.loc, 3)
-                if sqlenght != 0 and sqlenght < sqtarget:
-                    lenght = sqrt(sqlenght)
-                    # lenght = sqlenght ** 0.5
-                    invlenght = 1 / lenght
-                    factor = (lenght - target) * invlenght
+                lengthx = par.loc[0] - par2.loc[0]
+                lengthy = par.loc[1] - par2.loc[1]
+                lengthz = par.loc[2] - par2.loc[2]
+                sqlength  = square_dist(par.loc, par2.loc, 3)
+                if sqlength != 0 and sqlength < sqtarget:
+                    length = sqrt(sqlength)
+                    # length = sqlength ** 0.5
+                    invlength = 1 / length
+                    factor = (length - target) * invlength
                     ratio1 = (par2.mass / (par.mass + par2.mass))
                     ratio2 = 1 - ratio1
 
                     mathtmp = factor * stiff
                     force1 = ratio1 * mathtmp
                     force2 = ratio2 * mathtmp
-                    par.vel[0] -= lenghtx * force1
-                    par.vel[1] -= lenghty * force1
-                    par.vel[2] -= lenghtz * force1
-                    par2.vel[0] += lenghtx * force2
-                    par2.vel[1] += lenghty * force2
-                    par2.vel[2] += lenghtz * force2
+                    par.vel[0] -= lengthx * force1
+                    par.vel[1] -= lengthy * force1
+                    par.vel[2] -= lengthz * force1
+                    par2.vel[0] += lengthx * force2
+                    par2.vel[1] += lengthy * force2
+                    par2.vel[2] += lengthz * force2
 
-                    col_normal1[0] = (par2.loc[0] - par.loc[0]) * invlenght
-                    col_normal1[1] = (par2.loc[1] - par.loc[1]) * invlenght
-                    col_normal1[2] = (par2.loc[2] - par.loc[2]) * invlenght
+                    col_normal1[0] = (par2.loc[0] - par.loc[0]) * invlength
+                    col_normal1[1] = (par2.loc[1] - par.loc[1]) * invlength
+                    col_normal1[2] = (par2.loc[2] - par.loc[2]) * invlength
                     col_normal2[0] = col_normal1[0] * -1
                     col_normal2[1] = col_normal1[1] * -1
                     col_normal2[2] = col_normal1[2] * -1
@@ -179,8 +179,7 @@ cdef void collide(Particle *par)noexcept nogil:
                         (par2.collided_num + 1) * cython.sizeof(int)
                     )
 
-                    if ((par.sys.relink_chance + par2.sys.relink_chance) / 2) \
-                            > 0:
+                    if (((par.sys.relink_chance + par2.sys.relink_chance) / 2) > 0) or (((par.sys.freezing_point - par.temperature) <= 0) and ((par2.sys.freezing_point - par2.temperature) <= 0)):
                         create_link(par.id,par.sys.link_max * 2, par2.id)
                     
                     par.vel[0] *= par.sys.motion_multiplier

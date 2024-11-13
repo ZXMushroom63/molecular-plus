@@ -84,7 +84,7 @@ def define_props():
     )
     parset.mol_atmospheric_temperature = bpy.props.FloatProperty(
         name='Atmospheric Temperature', description="The temperature of the atmosphere",
-        default=20, min=0, max=10, precision=6, subtype='FACTOR'
+        default=20, min=-1000, max=1000, precision=6, subtype='FACTOR'
     )
     parset.mol_atmospheric_conductivity = bpy.props.FloatProperty(
         name='Atmospheric Conductivity', description="The rate that the particles' temperature interpolates to the atmospheric temperature.",
