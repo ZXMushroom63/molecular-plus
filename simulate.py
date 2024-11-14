@@ -1,6 +1,8 @@
+#from .to_ast import to_ast
 import bpy
 import array
 import numpy as np
+import random
 from .utils import get_object
 
 def get_weak_map(obj, psys, par_weak):
@@ -40,6 +42,8 @@ def pack_data(context, initiate):
                 par_loc = array.array('f', [0, 0, 0]) * parlen
                 par_vel = array.array('f', [0, 0, 0]) * parlen
                 par_meta = array.array('f', [psys.settings.mol_temp, 0, 0]) * parlen
+                for i in range(parlen):
+                    par_meta[i*3] += psys.settings.mol_temp_rand * random.uniform(-1, 1)
                 par_size = array.array('f', [0]) * parlen
                 par_alive = array.array('h', [0]) * parlen
 
@@ -102,7 +106,7 @@ def pack_data(context, initiate):
                         psys.settings.mol_relink_ebroken = psys.settings.mol_relink_broken
                         psys.settings.mol_relink_ebrokenrand = psys.settings.mol_relink_brokenrand
 
-                    params = [0] * 55
+                    params = [0] * 56
 
                     params[0] = psys.settings.mol_selfcollision_active
                     params[1] = psys.settings.mol_othercollision_active
@@ -159,6 +163,8 @@ def pack_data(context, initiate):
                     params[52] = psys.settings.mol_atmospheric_temperature
                     params[53] = psys.settings.mol_atmospheric_conductivity
                     params[54] = psys.settings.mol_thermolink * 1
+                    params[55] = 1 - psys.settings.mol_freeze_damp
+                    #params[56] = to_ast(psys.settings.mol_script.as_string().strip() if psys.settings.mol_script != None else "")
 
                 mol_exportdata = bpy.context.scene.mol_exportdata
 

@@ -93,6 +93,7 @@ cpdef init(importdata):
         psys[i].atmospheric_temperature = importdata[i + 1][6][52]
         psys[i].atmospheric_conductivity = importdata[i + 1][6][53]
         psys[i].thermodynamic_linking = importdata[i + 1][6][54]
+        psys[i].freeze_damping = importdata[i + 1][6][55]
 
         for ii in range(psys[i].parnum):
             parlist[jj].id = jj

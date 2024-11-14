@@ -15,3 +15,9 @@ cdef void apply(Particle *par, ParSys *parSys)noexcept nogil:
     real_deltatime = 1 / deltatime
     delta_temperature = parSys.atmospheric_temperature - par.temperature
     par.temperature += delta_temperature * parSys.atmospheric_conductivity * real_deltatime
+
+    #Freeze damping
+    if (((parSys.freezing_point - par.temperature) >= 0) and (parSys.thermodynamic_linking == 1)):
+        par.vel[0] *= parSys.freeze_damping * real_deltatime
+        par.vel[1] *= parSys.freeze_damping * real_deltatime
+        par.vel[2] *= parSys.freeze_damping * real_deltatime

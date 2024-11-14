@@ -97,6 +97,7 @@ cdef struct ParSys:
     float atmospheric_temperature
     #char* script
     int thermodynamic_linking
+    float freeze_damping
 
 cdef struct SParticle:
     int id
@@ -124,7 +125,6 @@ cdef struct Particle:
     int *neighbours
     int neighboursnum
     int neighboursmax
-
 
 cdef struct Pool:
     int axis

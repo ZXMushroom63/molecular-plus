@@ -75,6 +75,10 @@ def define_props():
         name='Temperature', description="The initial temperature of the particles",
         default=20, min=-1000, max=1000, precision=6, subtype='FACTOR'
     )
+    parset.mol_temp_rand = bpy.props.FloatProperty(
+        name='Temp Random', description="Random temperature offset",
+        default=0, min=0, max=1000, precision=6, subtype='FACTOR'
+    )
     parset.mol_thermolink = bpy.props.BoolProperty(
         name='Melting and Freezing', description="Should thermodynamics simulate melting and freezing.",
         default=False
@@ -86,6 +90,10 @@ def define_props():
     parset.mol_freeze = bpy.props.FloatProperty(
         name='Freezing Point', description="The freezing point of the particles in this particle system.",
         default=-1, min=-1000, max=1000, precision=6, subtype='FACTOR'
+    )
+    parset.mol_freeze_damp = bpy.props.FloatProperty(
+        name='Freeze Damp', description="Freezing damping effect",
+        default=0, min=0, max=1, precision=6, subtype='FACTOR'
     )
     parset.mol_conductivity = bpy.props.FloatProperty(
         name='Conductivity', description="The conductivity of the particles in the particle system (0-1).",
